@@ -1,102 +1,44 @@
-const menuToggle = document.getElementById("menuToggle");
-const navLinks = document.getElementById("navLinks");
 
-// Responsive mobile navigation
-menuToggle.addEventListener("click", () => {
-  const isOpen = navLinks.classList.toggle("open");
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
-  menuToggle.textContent = isOpen ? "✕" : "☰";
-});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Website</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <h2>MyWebsite</h2>
+    <div class="links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
 
-navLinks.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    navLinks.classList.remove("open");
-    menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.textContent = "☰";
-  });
-});
+  <main id="home" class="hero">
+    <p class="tagline">WELCOME TO MY WEBSITE</p>
+    <h1>Build Something <span>Amazing.</span></h1>
+    <p class="description">
+      A modern website built with HTML, CSS and JavaScript.
+      Simple, responsive, and ready for your ideas.
+    </p>
+    <button id="exploreBtn">Explore More →</button>
+    <p id="message"></p>
+  </main>
 
-// Filter artwork by category
-const filterButtons = document.querySelectorAll(".filter");
-const artCards = document.querySelectorAll(".art-card");
+  <section id="about" class="about">
+    <h2>About Us</h2>
+    <p>We turn creative ideas into beautiful digital experiences.</p>
+  </section>
 
-filterButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    filterButtons.forEach(item => {
-      item.classList.remove("active");
-      item.setAttribute("aria-pressed", "false");
-    });
+  <footer id="contact">
+    <p>© 2026 MyWebsite. All rights reserved.</p>
+  </footer>
 
-    button.classList.add("active");
-    button.setAttribute("aria-pressed", "true");
+  <script src="script.js"></script>
+</body>
+</html>
 
-    const category = button.dataset.filter;
 
-    artCards.forEach(card => {
-      const matches =
-        category === "all" ||
-        card.dataset.category === category;
-
-      card.classList.toggle("is-hidden", !matches);
-    });
-  });
-});
-
-// Reveal sections as they enter the viewport
-const revealElements = document.querySelectorAll(".reveal");
-
-if ("IntersectionObserver" in window) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.12
-  });
-
-  revealElements.forEach(element => observer.observe(element));
-} else {
-  revealElements.forEach(element => element.classList.add("visible"));
-}
-
-// Automatically update the footer year
-document.getElementById("year").textContent =
-  new Date().getFullYear();
-
-// Contact form: validate and prepare an email enquiry
-const contactForm = document.getElementById("contactForm");
-const formStatus = document.getElementById("formStatus");
-
-contactForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  if (!contactForm.reportValidity()) return;
-
-  const data = new FormData(contactForm);
-  const name = data.get("name").trim();
-  const email = data.get("email").trim();
-  const interest = data.get("interest");
-  const message = data.get("message").trim();
-
-  const subject = encodeURIComponent(
-    `Resin art enquiry: ${interest}`
-  );
-
-  const body = encodeURIComponent(
-    `Hello Kashish,\n\n` +
-    `My name is ${name}.\n` +
-    `My email: ${email}\n` +
-    `I'm interested in: ${interest}\n\n` +
-    `My idea:\n${message}\n\n` +
-    `Looking forward to hearing from you!`
-  );
-
-  formStatus.textContent =
-    "Opening your email app to send the enquiry…";
-
-  window.location.href =
-    `mailto:?subject=${subject}&body=${body}`;
-});
